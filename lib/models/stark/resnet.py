@@ -31,10 +31,10 @@ class ResNet(nn.Module):
                  norm_layer=None, last_layer=None):
         super(ResNet, self).__init__()
         assert last_layer in ['layer1', 'layer2', 'layer3', 'layer4', 'fc']
-        self.last_layer = last_layer
+        self.last_layer = last_layer#最后一个layer名字
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
-        self._norm_layer = norm_layer
+        self._norm_layer = norm_layer#归一化层
 
         self.inplanes = 64
         self.dilation = 1
@@ -47,11 +47,13 @@ class ResNet(nn.Module):
                              "or a 3-element tuple, got {}".format(replace_stride_with_dilation))
         self.groups = groups
         self.base_width = width_per_group
+        #-----------------------网络定义-----------------------
         self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2, padding=3,
                                bias=False)
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        #-----------------------------------------------------
         self.layer1 = self._make_layer(block, 64, layers[0])
         if self.last_layer != 'layer1':
             self.layer2 = self._make_layer(block, 128, layers[1], stride=2,

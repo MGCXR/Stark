@@ -24,24 +24,24 @@ class STARKS(nn.Module):
             aux_loss: True if auxiliary decoding losses (loss at each decoder layer) are to be used.
         """
         super().__init__()
-        self.backbone = backbone
-        self.transformer = transformer
-        self.box_head = box_head
-        self.num_queries = num_queries
-        hidden_dim = transformer.d_model
-        self.query_embed = nn.Embedding(num_queries, hidden_dim)  # object queries
-        self.bottleneck = nn.Conv2d(backbone.num_channels, hidden_dim, kernel_size=1)  # the bottleneck layer
-        self.aux_loss = aux_loss
-        self.head_type = head_type
+        self.backbone = backbone#导入backbone网络，为ResNet
+        self.transformer = transformer#导入Transformer网络
+        self.box_head = box_head#导入检测头网络
+        self.num_queries = num_queries#查询数量
+        hidden_dim = transformer.d_model#从transformer中获取隐藏层维度
+        self.query_embed = nn.Embedding(num_queries, hidden_dim)  # 查询嵌入层
+        self.bottleneck = nn.Conv2d(backbone.num_channels, hidden_dim, kernel_size=1)  # 创建一个瓶颈层
+        self.aux_loss = aux_loss#是否使用辅助损失
+        self.head_type = head_type#检测头类型
         if head_type == "CORNER":
-            self.feat_sz_s = int(box_head.feat_sz)
-            self.feat_len_s = int(box_head.feat_sz ** 2)
+            self.feat_sz_s = int(box_head.feat_sz)#特征图尺寸
+            self.feat_len_s = int(box_head.feat_sz ** 2)#特征数量
 
     def forward(self, img=None, seq_dict=None, mode="backbone", run_box_head=True, run_cls_head=False):
         if mode == "backbone":
-            return self.forward_backbone(img)
+            return self.forward_backbone(img)#提取特征图
         elif mode == "transformer":
-            return self.forward_transformer(seq_dict, run_box_head=run_box_head, run_cls_head=run_cls_head)
+            return self.forward_transformer(seq_dict, run_box_head=run_box_head, run_cls_head=run_cls_head)#注意力处理并检测
         else:
             raise ValueError
 

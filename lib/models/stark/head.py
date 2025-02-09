@@ -27,8 +27,8 @@ class Corner_Predictor(nn.Module):
 
     def __init__(self, inplanes=64, channel=256, feat_sz=20, stride=16, freeze_bn=False):
         super(Corner_Predictor, self).__init__()
-        self.feat_sz = feat_sz
-        self.stride = stride
+        self.feat_sz = feat_sz#20
+        self.stride = stride#16
         self.img_sz = self.feat_sz * self.stride
         '''top-left corner'''
         self.conv1_tl = conv(inplanes, channel, freeze_bn=freeze_bn)

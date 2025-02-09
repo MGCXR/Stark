@@ -143,8 +143,8 @@ class Joiner(nn.Sequential):
 
 def build_backbone(cfg):
     position_embedding = build_position_encoding(cfg)
-    train_backbone = cfg.TRAIN.BACKBONE_MULTIPLIER > 0
-    return_interm_layers = cfg.MODEL.PREDICT_MASK
+    train_backbone = cfg.TRAIN.BACKBONE_MULTIPLIER > 0#0.1
+    return_interm_layers = cfg.MODEL.PREDICT_MASK#False
     if cfg.MODEL.BACKBONE.TYPE == "RepVGG-A0":
         try:
             ckpt_path = os.path.join(cfg.ckpt_dir, "RepVGG-A0-train.pth")
